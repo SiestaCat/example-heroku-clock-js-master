@@ -1,17 +1,15 @@
-//OnInterval
-var threeSecondInterval = function(){
-    console.log("Another 3 seconds have gone by. What did you do in them?");
-}
-setInterval(threeSecondInterval, 3000)
+const fs = require('node:fs');
 
-//For specific times, use a chron job
-var fifteenSeconsAfterMinute = function() {
-  console.log("Another minute is gone forever. Hopefully, you made the most of it...");
+var index = 1;
+
+var threeSecondInterval = function(){
+    let log_line = "Another 3 seconds have gone by. What did you do in them?. Crontab index " + index;
+    console.log(log_line);
+    fs.writeFile('./clock.log', log_line, () => {});
+    index++;
+    call_cron();
 }
-var CronJob = require('cron').CronJob;
-new CronJob({
-  cronTime: "15 * * * * *",//15 seconds after every minute
-  onTick: fifteenSeconsAfterMinute,
-  start: true,
-  timeZone: "America/Los_Angeles"
-});
+
+var call_cron = () => setInterval(threeSecondInterval, 3000);
+
+call_cron();
